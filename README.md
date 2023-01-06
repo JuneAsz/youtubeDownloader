@@ -8,7 +8,7 @@ Open exe -> Click "Set directory" -> Select preferred directory for the download
 
 How to build it yourself if you are afraid of random .exe files from the internet (You should be!) 
 
-Get the code from the .py file and make sure you have PyTube library installed -> Run the code on your preferred Text/Code editor (I use VSCode) -> Open CMD with elevated privileges -> I used PyInstaller to compile the thing into an .exe -> type in CMD "python -m PyInstaller 'nameofthepyfile.py' --onefile", click enter -> enjoy.
+Get the code from the .py file and make sure you have PyTube library installed -> Run the code on your preferred Text/Code editor (I use VSCode) -> Open CMD with elevated privileges -> I used PyInstaller to compile the thing into an .exe -> type in CMD "python -m PyInstaller 'nameofthepyfile.py' --onefile", obviously change the 'nameofthepyfile.py' to the name that your file is using, click enter -> enjoy. 
 
 
 no roblem
