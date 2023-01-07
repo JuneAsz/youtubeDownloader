@@ -16,6 +16,8 @@ def checkPath(pathdir):
     else:
         os.mkdirs(pathdir)
 
+def openDownloadsFolder(pathdir):
+    os.startfile(pathdir)
 
 # downloading video, takes youtube url and directory path as parameters
 
@@ -23,13 +25,19 @@ def downloadVideo(videoLink, path):
     yt = youtube(videoLink)
     print(f"Downloading: {yt.title}")
     checkPath(path)
-    yt.streams.filter(only_audio=True).last().download()
+    yt.streams.filter(only_audio=True).last().download(output_path = path)
     print(f"{yt.title} has finished downloading!")
 
 
+def downloadMp4(videoLink, path):
+    yt = youtube(videoLink)
+    print(f"Downloading: {yt.title}")
+    checkPath(path)
+    yt.streams.filter(progressive=True).order_by("resolution").last().download(output_path = path)
+    print(f"{yt.title} has finished downloading!")
+
 
 #downloading playlist, takes youtube url and directory path as parameters
-
 
 def downloadPlaylist(playlistLink, path):
     playlist = Playlist(playlistLink)
@@ -40,6 +48,21 @@ def downloadPlaylist(playlistLink, path):
         yt = youtube(url)
         print(f"Downloading: {yt.title}")
         yt.streams.filter(only_audio=True).last().download(output_path = path)
+        print(f"{yt.title} has finished downloading!")
+    print("Playlist has finished downloading!")
+
+
+
+
+def downloadMp4Playlist(playlistLink, path):
+    playlist = Playlist(playlistLink)
+    playlistUrls = list(playlist.video_urls)
+    print(playlistUrls)
+    checkPath(path)
+    for url in playlistUrls:
+        yt = youtube(url)
+        print(f"Downloading: {yt.title}")
+        yt.streams.filter(progressive=True).order_by("resolution").last().download(output_path = path)
         print(f"{yt.title} has finished downloading!")
     print("Playlist has finished downloading!")
 
@@ -64,6 +87,17 @@ def download_button():
     else:
         downloadVideo(videoLink, targetPath)
 
+def mp4_download_button():
+    videoLink = youtubeVideo.get()
+    targetPath = filename
+    if "playlist?list" in videoLink:
+        downloadMp4Playlist(videoLink, targetPath)
+    else:
+        downloadMp4(videoLink, targetPath)
+
+
+
+
 #Tkinter things
 
 #Initialize an object of class Tk
@@ -77,10 +111,11 @@ root.configure(background="#86726c")
 root.title("ytDownloader")
 root.geometry("800x450")
 
-#Download button 
+#set directory button 
 
 button2 = Button(text="Select download directory", command=browse_button)
 button2.place(x=1, y=425)
+
 
 #No fucking clue.
 
@@ -94,6 +129,11 @@ filename = StringVar()
 fileDirectory = Label(root, text = filename)
 fileDirectory.place(x = 155, y=430)
 
+#open download directory button
+
+openDownloadsButton = Button(text=" Open download directory", command=lambda: openDownloadsFolder(filename))
+openDownloadsButton.place(x = 1, y=395)
+
 
 #youtube URL location
 
@@ -104,7 +144,10 @@ youtubeVideo.place(x=1, y=50)
 
 #Download button
 
-downloadButton = Button(root, width=50, height = 2, text="Download", command=download_button).place(x=225, y = 385)
+downloadButton = Button(root, width=50, height = 2, text="Download only audio", command=download_button).place(x=225, y = 385)
+
+downloadMp4Button = Button(root, width=50, height = 2, text="Download as mp4", command=mp4_download_button).place(x=225, y = 340)
+
 
 
 #Exit button
